@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monad Testnet Automation – Setup Guide</title>
+  <style>
+    :root {
+      --bg: #0a0a12;
+      --card: #141424;
+      --text: #00f0ff;
+      --text-dim: #66ccff;
+      --accent: #00ccff;
+      --border: #006688;
+      --success: #00ffaa;
+      --warning: #ffaa33;
+      --danger: #ff5577;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, monospace;
+      line-height: 1.7;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo img {
+      width: 80px;
+      height: auto;
+      border-radius: 12px;
+      border: 2px solid var(--accent);
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      color: var(--text-dim);
+      font-size: 1.1em;
+    }
+    .branding a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .branding a:hover { text-decoration: underline; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    h2 {
+      font-size: 1.6em;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+    h3 {
+      font-size: 1.3em;
+      margin: 16px 0 12px;
+      color: var(--success);
+    }
+    p, li { margin-bottom: 12px; color: #e0f7ff; }
+    ul { padding-left: 25px; margin-bottom: 18px; }
+    li { margin-bottom: 8px; }
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: var(--success);
+    }
+    pre {
+      background: #000;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      border: 1px solid var(--border);
+      color: #e0f7ff;
+    }
+    .warning {
+      background: rgba(255, 170, 51, 0.1);
+      border-left: 4px solid var(--warning);
+      padding: 15px;
+      margin: 20px 0;
+      color: var(--warning);
+    }
+    .danger {
+      background: rgba(255, 85, 119, 0.1);
+      border-left: 4px solid var(--danger);
+      padding: 15px;
+      margin: 20px 0;
+      color: var(--danger);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.9em;
+    }
+    @media (max-width: 600px) {
+      .logo img { width: 60px; }
+      h1 { font-size: 1.8em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="https://i.ibb.co.com/DP18bpvj/IMG-20250927-192419-907.jpg" alt="Crypto Hunters Logo" />
+      </div>
+      <h1>Monad Testnet Automation Setup</h1>
+      <div class="subtitle">Run your bot securely on Android with Termux, UserLAnd, or Pydroid</div>
+      <div class="branding">
+        📣 By <a href="https://t.me/cryptoHunters_247" target="_blank">@cryptoHunters_247</a> |
+        💻 <a href="https://github.com/EfajTahamidRifat" target="_blank">GitHub</a>
+      </div>
+    </header>
+
+    <!-- DYOR & Sybil Warning -->
+    <div class="danger">
+      <strong>⚠️ DYOR – Do Your Own Research</strong><br>
+      This guide is for <strong>educational and testnet purposes only</strong>.  
+      Monad Testnet is not mainnet. Never use real funds.  
+      Participation may carry <strong>Sybil risk</strong> — projects may filter or penalize automated activity.
+    </div>
+
+    <!-- Monad Context -->
+    <div class="card">
+      <h2>🌐 Monad Testnet Facts</h2>
+      <ul>
+        <li><strong>RPC</strong>: <code>https://testnet-rpc.monad.xyz</code></li>
+        <li><strong>Gas Price</strong>: <strong>0 GWei</strong> (transactions are free)</li>
+        <li><strong>EVM Compatible</strong>: Yes — deploy Ethereum contracts directly</li>
+        <li><strong>Explorer Issue</strong>: <code>/tx/...</code> pages show “Page Not Found”, but <strong>transactions still succeed on-chain</strong></li>
+        <li><strong>Faucet</strong>: Available on <a href="https://testnet.monadexplorer.com" target="_blank">explorer homepage</a></li>
+      </ul>
+    </div>
+
+    <!-- Private Key from Seed -->
+    <div class="card">
+      <h2>🔑 Generate Private Key from Seed Phrase (Pydroid)</h2>
+      <p>Only do this on a secure, offline device.</p>
+      <ol>
+        <li>Install <strong>Pydroid 3</strong> from Play Store</li>
+        <li>Go to <strong>PyPI</strong> tab → install: <code>eth-account</code> and <code>mnemonic</code></li>
+        <li>Create new script with this code:
+          <pre>from mnemonic import Mnemonic
+from eth_account import Account
+
+Account.enable_unaudited_hdwallet_features()
+
+seed = "your 12-word seed phrase"
+account = Account.from_mnemonic(seed, path="m/44'/60'/0'/0/0")
+
+print("Private Key:", account.key.hex())
+print("Address:", account.address)</pre>
+        </li>
+        <li>Run → copy private key → save to <code>private.key</code></li>
+        <li><strong>Delete the script immediately after use!</strong></li>
+      </ol>
+
+      <div class="warning">
+        🔒 Never share your seed phrase. Never run this code online.  
+        If your seed is exposed, <strong>all funds are at risk</strong>.
+      </div>
+    </div>
+
+    <!-- Termux Setup -->
+    <div class="card">
+      <h2>📱 Termux Setup (Recommended)</h2>
+      <ol>
+        <li>Install <strong>Termux</strong> from <a href="https://f-droid.org/en/packages/com.termux/" target="_blank">F-Droid</a> (not Play Store)</li>
+        <li>Run these commands <strong>one by one</strong>:
+          <pre>pkg update && pkg upgrade -y
+pkg install git nodejs npm -y
+git clone https://github.com/EfajTahamidRifat/Monad_bot.git
+cd Monad_bot
+npm install
+echo "YOUR_PRIVATE_KEY_HERE" > private.key
+node server.js</pre>
+        </li>
+        <li>Open browser → go to: <code>http://localhost:3000</code></li>
+      </ol>
+    </div>
+
+    <!-- UserLAnd / Kali -->
+    <div class="card">
+      <h2>🐧 UserLAnd or Kali Linux</h2>
+      <ol>
+        <li>Install <strong>UserLAnd Studio</strong> or <strong>Kali NetHunter</strong></li>
+        <li>Launch Ubuntu/Kali terminal</li>
+        <li>Run:
+          <pre>sudo apt update
+sudo apt install -y git nodejs npm
+# Then same as Termux from 'git clone' onward</pre>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Critical Warnings -->
+    <div class="danger">
+      <strong>🚨 Critical Security Practices</strong>
+      <ul>
+        <li>Never commit <code>private.key</code> to GitHub</li>
+        <li>Never use mainnet private keys on testnet bots</li>
+        <li>Assume all automation is visible on-chain — <strong>you may be flagged as Sybil</strong></li>
+        <li>Use a dedicated testnet wallet with no mainnet linkage</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>🔗 <a href="https://github.com/EfajTahamidRifat/Monad_bot" target="_blank">GitHub Repository</a></p>
+      <p>💬 Support: <a href="https://t.me/cryptoHunters_247" target="_blank">@cryptoHunters_247</a></p>
+      <p><em>Made with ❤️ for the Monad Ecosystem — DYOR!</em></p>
+    </div>
+  </div>
+</body>
+</html>
